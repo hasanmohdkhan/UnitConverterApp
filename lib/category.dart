@@ -5,6 +5,9 @@
 // To keep your imports tidy, follow the ordering guidelines at
 // https://www.dartlang.org/guides/language/effective-dart/style#ordering
 import 'package:flutter/material.dart';
+import 'package:list/category_route.dart';
+import 'package:list/converter_route.dart';
+import 'package:list/unit.dart';
 
 /// A custom [Category] widget.
 ///
@@ -17,18 +20,20 @@ class Category extends StatelessWidget {
   final String name;
   final ColorSwatch color;
   final IconData iconLocation;
+  final List<Unit> units;
 
   /// Creates a [Category].
   ///
   /// A [Category] saves the name of the Category (e.g. 'Length'), its color for
   /// the UI, and the icon that represents it (e.g. a ruler).
-  const Category(
-      {Key key,
-      @required this.name,
-      @required this.color,
-      @required this.iconLocation})
+  const Category({Key key,
+    @required this.name,
+    @required this.color,
+    @required this.iconLocation,
+    @required this.units})
       : assert(name != null),
         assert(color != null),
+        assert(units != null),
         assert(iconLocation != null),
         super(key: key);
 
@@ -50,7 +55,10 @@ class Category extends StatelessWidget {
                 highlightColor: color,
                 splashColor: color,
                 onTap: () {
-                  print('I was tapped!');
+                  // We can use either the () => function() or the () { function(); }
+                  // syntax.
+                  // TODO: Update this onTap property to call _navigateToConverter()
+                  _navigateToConverter(context);
                 },
                 child: Padding(
                     padding: EdgeInsets.all(8.0),
@@ -63,11 +71,34 @@ class Category extends StatelessWidget {
                         ),
                         Center(
                             child: Text(
-                          name,
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.headline5,
-                        ))
+                              name,
+                              textAlign: TextAlign.center,
+                              style: Theme
+                                  .of(context)
+                                  .textTheme
+                                  .headline5,
+                            ))
                       ],
                     )))));
+  }
+
+  void _navigateToConverter(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute <Null>(
+      builder: (BuildContext context) {
+        return Scaffold(
+          appBar: AppBar(
+            elevation: 1.0,
+            title: Text(name, style: Theme
+                .of(context)
+                .textTheme
+                .headline1),
+            centerTitle: true,
+            backgroundColor: color,
+          ),
+          body: ConverterScreen(units: units, color: color),
+
+
+        );
+      },));
   }
 }

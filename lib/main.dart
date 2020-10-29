@@ -24,7 +24,7 @@ class UnitConverterApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Unit Converter',
-      home: CategoryRoute(),
+      home: CategoryScreen(),
     );
   }
 }
